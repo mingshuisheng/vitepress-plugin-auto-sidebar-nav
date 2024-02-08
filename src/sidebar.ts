@@ -46,6 +46,7 @@ async function readAllFile(
     (f) =>
       !excludes.some((exclude) => path.join(dirPath, f).startsWith(exclude))
   );
+
   const nextDirs: string[] = [];
 
   for (let cur of current) {

@@ -9,6 +9,15 @@ export interface Options {
 
 export default function VitePluginAutoSidebarAndNav(options: Options) {
   const opts = normalizeOptions(options);
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  function clear() {
+    clearTimeout(timer);
+  }
+  function schedule(fn: () => void) {
+    clear();
+    timer = setTimeout(fn, 500);
+  }
   return <Plugin>{
     name: "vitepress-plugin-auto-sidebar-and-nav",
     config: async (config) => {
@@ -22,14 +31,15 @@ export default function VitePluginAutoSidebarAndNav(options: Options) {
         opts.docsDir,
         opts.exclude ?? []
       );
+
       return config;
     },
     configureServer: ({ watcher, restart }: ViteDevServer) => {
       const fsWatcher = watcher.add("*.md");
-      fsWatcher.on("all", (event) => {
-        if (["addDir", "unlinkDir"].includes(event)) return;
-        restart();
-      });
+      const restartServer = () => schedule(restart);
+      fsWatcher.on("add", restartServer);
+      fsWatcher.on("unlink", restartServer);
+      fsWatcher.on("change", restartServer);
     },
   };
 }
