@@ -16,10 +16,10 @@ export async function getSidebar(docsPath: string, excludes: string[]) {
     fileInfos.push(await getFileInfo(file));
   }
 
-  return fileInfos
+  const sidebar: DefaultTheme.SidebarMulti = fileInfos
     .map((info) => ({
       parent: info.fileDir.replace(docsPath, "").replace(/\\/g, "/"),
-      text: info.navTitle ?? info.fileNameWithoutExt,
+      text: info.sidebarText ?? info.fileNameWithoutExt,
       link:
         info.fileDir.replace(docsPath, "").replace(/\\/g, "/") +
         "/" +
@@ -35,6 +35,14 @@ export async function getSidebar(docsPath: string, excludes: string[]) {
       });
       return sidebar;
     }, {} as DefaultTheme.SidebarMulti);
+
+  return {
+    sidebar,
+    cache: fileInfos.reduce((map, cur) => {
+      map.set(cur.filePath, cur);
+      return map;
+    }, new Map<string, FileInfo>()),
+  } as const;
 }
 
 async function readAllFile(
@@ -72,19 +80,19 @@ async function readAllFile(
   return files;
 }
 
-type FileInfo = {
-  navTitle: string;
+export type FileInfo = {
+  sidebarText: string;
   filePath: string;
   fileName: string;
   fileDir: string;
   fileNameWithoutExt: string;
 };
 
-async function getFileInfo(filePath: string): Promise<FileInfo> {
+export async function getFileInfo(filePath: string): Promise<FileInfo> {
   const content = await readFile(filePath);
 
   return {
-    navTitle: matter(content).data.navTitle,
+    sidebarText: matter(content).data.sidebarText,
     filePath,
     fileName: path.basename(filePath),
     fileDir: path.dirname(filePath),
