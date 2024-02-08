@@ -1,6 +1,6 @@
 {
   "name": "@mingshuisheng/vitepress-plugin-auto-sidebar-nav",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Automatically generate sidebars and navigation",
   "scripts": {
     "build": "unbuild"
@@ -39,11 +39,10 @@
   "devDependencies": {
     "@types/node": "^20.11.16",
     "unbuild": "^2.0.0",
-    "vite": "^5.1.0",
+    "vite": "5.0.12",
     "vitepress": "1.0.0-rc.42"
   },
   "peerDependencies": {
-    "vite": "^5.1.0",
     "vitepress": "1.0.0-rc.42"
   }
 }
