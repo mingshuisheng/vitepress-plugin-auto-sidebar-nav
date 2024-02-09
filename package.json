@@ -1,6 +1,6 @@
 {
   "name": "@mingshuisheng/vitepress-plugin-auto-sidebar-nav",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Automatically generate sidebars and navigation",
   "scripts": {
     "build": "unbuild"

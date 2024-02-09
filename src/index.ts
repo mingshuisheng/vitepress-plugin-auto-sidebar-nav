@@ -45,7 +45,6 @@ export default function VitePluginAutoSidebarAndNav(options: Options) {
       fsWatcher.on("add", restartServer);
       fsWatcher.on("unlink", restartServer);
       fsWatcher.on("change", async (path) => {
-        console.log("change md", path);
         const oldInfo = cacheMap?.get(path);
         if (!oldInfo) {
           restartServer();
